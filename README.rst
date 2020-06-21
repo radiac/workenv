@@ -196,6 +196,9 @@ Putting together all the options above into a sample ``.workenv_config.yml``::
     _common:
       env:
         COMPOSE_PROJECT_NAME: '{{project.name}}'
+      commands:
+        open:
+          run: xdg-open .
     myproject:
       path: /path/to/myproject
       source:
@@ -232,3 +235,9 @@ Putting together all the options above into a sample ``.workenv_config.yml``::
 
     cd /path/to/other
     export COMPOSE_PROJECT_NAME=other
+
+``we other open`` is equivalent to::
+
+    cd /path/to/myproject
+    export COMPOSE_PROJECT_NAME=other
+    xdg-open .
