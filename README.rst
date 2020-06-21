@@ -80,43 +80,115 @@ Configuration file format
 
 The top level of the YAML file are the names of the projects.
 
-The ``_config`` project controls settings:
-
-``verbose``
-  If ``true``, show bash commands when running them
-
-``history``
-  If ``true``, add the commands to history
-
-The ``_common`` project defines sources, environment variables and commands which will
-be added to all other projects.
-
 A project can have the following attributes:
 
 ``path``
-  The path to set as the current working directory
+  The path to set as the current working directory. This will be the first command run.
+
+  Example::
+
+      path: /path/to/foo
+
+  Bash equivalent::
+
+      cd /path/to/foo
+
 
 ``source``
   Path or paths to call using ``source``
 
+  Example::
+
+      source:
+      - venv/bin/activate
+      - .env
+
+  Bash equivalent::
+
+      source venv/bin/activate
+      source .env
+
+
 ``env``
   Dict of environment variables to set
+
+  Example::
+
+      env:
+        COMPOSE_PROJECT_NAME: my_project
+
+  Bash equivalent::
+
+      export COMPOSE_PROJECT_NAME=my_project
+
 
 ``run``
   Command or list of commands to run
 
+  Example::
+
+      run:
+      - nvm use
+      - yvm use
+
+  Bash equivalent::
+
+      nvm use
+      yvm use
+
+
 ``commands``
   Dict of Command objects
 
-A command can have the same attributes, except it cannot define its own ``commands``.
+  Example::
+
+    myproject:
+      commands:
+        database:
+          run: docker-compose up database
+
+  Usage::
+
+      we myproject database
+
+  Bash equivalent::
+
+      docker-compose up database
+
+  A command will inherit the ``path`` and ``env`` of its parent project, unless it
+  defines its own.
+
+  It will inherit the ``source`` of its parent project only if it does not specify its
+  own path or source.
+
+  A command can have the same attributes as a project, except it cannot define its own
+  ``commands``.
 
 Values can substitute the project name with ``{{project.name}}``.
+
+There are two special top-level YAML objects:
+
+``_config``
+  Controls settings:
+
+  ``verbose``
+    If ``true``, show bash commands when running them
+
+  ``history``
+    If ``true``, add the commands to history
+
+``_common``
+  Common project which can define a common ``source``, ``env``, ``run`` and ``commands``
+  which will be added to all other projects, regardless of whether they define their
+  own.
+
+  The common project cannot specify a path.
 
 
 Full example
 ============
 
-Sample ``.workenv_config.yml``::
+Putting together all the options above into a sample ``.workenv_config.yml``::
 
     _config:
       verbose: true
