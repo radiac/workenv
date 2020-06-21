@@ -2,7 +2,7 @@
 workenv
 =======
 
-A bash shortcut for jumping between local work environments and carrying out tasks
+A shortcut for jumping between local work environments in bash and carrying out tasks
 within them.
 
 Requires Python 3.7+ and bash.
