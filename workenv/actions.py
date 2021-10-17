@@ -54,6 +54,9 @@ def add(config, actions, args):
     Register a new project or command using the current path
     """
     cwd = Path.cwd()
+    if len(args) == 0:
+        error("Must specify a project name to add it")
+        return
     project_name, command_name = (args + [None])[0:2]
 
     # Get or create project
@@ -63,7 +66,13 @@ def add(config, actions, args):
 
     if project_name not in config.projects:
         config.projects[project_name] = Project(
-            name=project_name, path=cwd, source=[], env=[], run=[], parent=None,
+            config=config,
+            name=project_name,
+            path=cwd,
+            source=[],
+            env=[],
+            run=[],
+            parent=None,
         )
     project = config.projects[project_name]
 

@@ -54,7 +54,7 @@ class Command:
         parent: Optional[CommandType] = None,
     ) -> CommandType:
         path: Optional[Path] = None
-        if "path" in data:
+        if data.get("path"):
             path = Path(data["path"])
 
         source: List[str] = []
@@ -128,7 +128,7 @@ class Command:
 
     def to_dict(self):
         data = {}
-        if self.path:
+        if self._path:
             data["path"] = str(self._path)
 
         for attr in ["source", "env", "run"]:

@@ -31,7 +31,7 @@ def run():
 
     if len(actions) > 1 or (len(actions) == 0 and len(args) == 0) or len(args) > 2:
 
-        command_name = os.environ.get(COMMAND_VAR)
+        command_name = os.environ.get(COMMAND_VAR, "we")
         error(f"Usage: {command_name} <project> [<command>]")
         error(f"Usage: {command_name} <action> [<project> [<command>]]")
         return
