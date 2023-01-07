@@ -2,7 +2,7 @@
 Config loader
 """
 from __future__ import annotations
-
+import unicodedata
 import re
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Type, TypeVar
@@ -112,7 +112,10 @@ class Command:
         Get data for variable replacement
         """
         if not self._replacements:
-            self._replacements = dict(name=self.get_project_name())
+            self._replacements = dict(
+                name=self.get_project_name(),
+                slug=self.get_project_slug(),
+            )
         return self._replacements
 
     def replace_values(self, value: str):
@@ -142,6 +145,19 @@ class Command:
         if self.parent:
             return self.parent.name
         return self.name
+
+    def get_project_slug(self):
+        # Based on Django's slugify()
+        name = self.get_project_name()
+
+        slug = (
+            unicodedata.normalize("NFKD", name)
+            .encode("ascii", "ignore")
+            .decode("ascii")
+        )
+        slug = re.sub(r"[^\w\s-]", "", slug.lower())
+        slug = re.sub(r"[-\s]+", "-", slug).strip("-_")
+        return slug
 
     def clone_to(self, parent: Command) -> Command:
         clone = self.from_dict(

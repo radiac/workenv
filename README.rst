@@ -164,7 +164,7 @@ A project can have the following attributes:
   A command can have the same attributes as a project, except it cannot define its own
   ``commands``.
 
-Values can substitute the project name with ``{{project.name}}``.
+Values can substitute the project name with ``{{project.name}}`` or ``{{project.slug}}``.
 
 There are two special top-level YAML objects:
 
@@ -195,7 +195,7 @@ Putting together all the options above into a sample ``.workenv_config.yml``::
       history: false
     _common:
       env:
-        COMPOSE_PROJECT_NAME: '{{project.name}}'
+        COMPOSE_PROJECT_NAME: '{{project.slug}}'
       commands:
         open:
           run: xdg-open .
