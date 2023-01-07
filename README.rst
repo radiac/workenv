@@ -40,7 +40,12 @@ see docs below.
 Installation
 ============
 
-Install to a virtual environment with::
+**Recommended**: Install using `pipx <https://pypa.github.io/pipx/>`_::
+
+  pipx install workenv
+  workenv --install
+
+**Alternative**: Install to a virtual environment with::
 
   cd path/to/installation
   virtualenv --python=python3.8 venv
@@ -48,7 +53,7 @@ Install to a virtual environment with::
   pip install workenv
   workenv --install
 
-This will add the command as ``we`` by adding a line to your ``.bashrc``.
+Both of these options will add the command as ``we`` by adding a line to your ``.bashrc``.
 
 If you would prefer a different command name, you can specify it when installing::
 
@@ -56,7 +61,7 @@ If you would prefer a different command name, you can specify it when installing
 
 Restart your shell session for your change to take effect.
 
-To uninstall, remove the line from ``.bashrc`` and delete your virtual environment.
+To uninstall, remove the line from ``.bashrc`` and uninstall with pipx or delete your virtual environment.
 
 
 Configuration
