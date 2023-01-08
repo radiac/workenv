@@ -9,10 +9,5 @@ pytest-mypy
 coveralls
 types-PyYAML
 
-# Docs
--e git+https://github.com/radiac/doc8.git@feature/python-api#egg=doc8
-#sphinx
-#sphinx_rtd_theme
-
 # Project
 pyyaml
