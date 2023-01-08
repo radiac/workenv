@@ -7,6 +7,7 @@ pytest-flake8
 pytest-isort
 pytest-mypy
 coveralls
+types-PyYAML
 
 # Docs
 -e git+https://github.com/radiac/doc8.git@feature/python-api#egg=doc8

@@ -94,18 +94,13 @@ def test_run_project_command(capsys, monkeypatch, config_file):
 
 # TODO:
 def test_add_no_arguments():
-    '''
-Traceback (most recent call last):
-  File "/home/radiac/work/projects/workenv/venv/bin/workenv", line 11, in <module>
-    load_entry_point('workenv', 'console_scripts', 'workenv')()
-  File "/home/radiac/work/projects/workenv/repo/workenv/cli.py", line 42, in run
-    action_registry[action](config, actions, args)
-  File "/home/radiac/work/projects/workenv/repo/workenv/actions.py", line 57, in add
-    project_name, command_name = (args + [None])[0:2]
-ValueError: not enough values to unpack (expected 2, got 1)
-    '''
-
-def test_add_project(capsys, monkeypatch, config_file):
-    # set cwd to fake path
-    # call --add test
-    # check config to see if path was added
+    """
+    Traceback (most recent call last):
+      File "/home/radiac/work/projects/workenv/venv/bin/workenv", line 11, in <module>
+        load_entry_point('workenv', 'console_scripts', 'workenv')()
+      File "/home/radiac/work/projects/workenv/repo/workenv/cli.py", line 42, in run
+        action_registry[action](config, actions, args)
+      File "/home/radiac/work/projects/workenv/repo/workenv/actions.py", line 57, in add
+        project_name, command_name = (args + [None])[0:2]
+    ValueError: not enough values to unpack (expected 2, got 1)
+    """
