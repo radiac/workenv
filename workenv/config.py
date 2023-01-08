@@ -2,8 +2,9 @@
 Config loader
 """
 from __future__ import annotations
-import unicodedata
+
 import re
+import unicodedata
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Type, TypeVar
 

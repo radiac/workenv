@@ -86,7 +86,12 @@ def add(config, actions, args):
         return
 
     project.commands[command_name] = Command(
-        name=command_name, path=cwd, source=[], env=[], run=[], parent=project,
+        name=command_name,
+        path=cwd,
+        source=[],
+        env=[],
+        run=[],
+        parent=project,
     )
 
     config.save()
