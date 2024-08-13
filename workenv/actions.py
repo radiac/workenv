@@ -1,15 +1,15 @@
 """
 Command line actions to manage workenv
 """
+
 import os
 import subprocess
 from pathlib import Path
 
 from . import bash
-from .config import Command, Project
-from .constants import COMMAND_NAME
+from .config import Command, DeferredProject, Project
+from .constants import COMMAND_NAME, PROJECT_DEFAULT_FILENAME
 from .io import echo, error
-
 
 registry = {}
 
@@ -65,15 +65,22 @@ def add(config, actions, args):
         return
 
     if project_name not in config.projects:
-        config.projects[project_name] = Project(
-            config=config,
-            name=project_name,
-            path=cwd,
-            source=[],
-            env=[],
-            run=[],
-            parent=None,
-        )
+        if (cwd / PROJECT_DEFAULT_FILENAME).is_file():
+            config.projects[project_name] = DeferredProject(
+                config=config,
+                name=project_name,
+                path=cwd,
+            )
+        else:
+            config.projects[project_name] = Project(
+                config=config,
+                name=project_name,
+                path=cwd,
+                source=[],
+                env={},
+                run=[],
+                parent=None,
+            )
     project = config.projects[project_name]
 
     if not command_name:
@@ -86,13 +93,33 @@ def add(config, actions, args):
         return
 
     project.commands[command_name] = Command(
+        config=config,
         name=command_name,
         path=cwd,
         source=[],
-        env=[],
+        env={},
         run=[],
         parent=project,
     )
 
     config.save()
     echo(f"Added command {command_name} to project {project_name}")
+
+
+@action
+def remove(config, actions, args):
+    """
+    Remove a project from workenv
+    """
+    if len(args) == 0:
+        error("Must specify a project name to remove it")
+        return
+
+    project_name = args[0]
+
+    if project_name not in config.projects:
+        error(f"Project {project_name} not found")
+
+    del config.projects[project_name]
+    config.save()
+    echo(f"Removed {project_name}")

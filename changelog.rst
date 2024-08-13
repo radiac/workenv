@@ -2,13 +2,25 @@
 Changelog
 =========
 
-2.0.0 - 2020-06-21
-==================
+2.1.0 - ???
+===========
 
-* First public release
+Features:
+
+* Add ``config`` project attribute to support configs in project dir
+* Can use as a module, ``python -m workenv``
+* Improve error handling
 
 
 2.0.1 - 2023-01-08
 ==================
 
+Features:
+
 * Add ``{{project.slug}}`` support
+
+
+2.0.0 - 2020-06-21
+==================
+
+* First public release

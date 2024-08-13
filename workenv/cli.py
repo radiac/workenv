@@ -1,13 +1,14 @@
 """
 Command line definition
 """
+
 import os
 import sys
 from pathlib import Path
 
 from .actions import registry as action_registry
 from .bash import autocomplete
-from .config import Config
+from .config import Config, ConfigError
 from .constants import COMMAND_VAR, CONFIG_DEFAULT_FILENAME, CONFIG_ENV_VAR
 from .io import echo, error
 
@@ -18,7 +19,11 @@ def get_config_path() -> Path:
 
 
 def run():
-    config = Config(file=get_config_path())
+    try:
+        config = Config(file=get_config_path())
+    except ConfigError as e:
+        error(f"Could not load config: {e.message}")
+        return
 
     completions = autocomplete(config)
     if completions is not None:
@@ -30,7 +35,6 @@ def run():
     actions = [action[2:] for action in sys.argv[1:] if action.startswith("--")]
 
     if len(actions) > 1 or (len(actions) == 0 and len(args) == 0) or len(args) > 2:
-
         command_name = os.environ.get(COMMAND_VAR, "we")
         error(f"Usage: {command_name} <project> [<command>]")
         error(f"Usage: {command_name} <action> [<project> [<command>]]")

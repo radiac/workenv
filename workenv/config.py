@@ -1,6 +1,7 @@
 """
 Config loader
 """
+
 from __future__ import annotations
 
 import re
@@ -10,11 +11,16 @@ from typing import Any, Dict, List, Optional, Type, TypeVar
 
 import yaml
 
+from .constants import PROJECT_DEFAULT_FILENAME
 
 CommandType = TypeVar("CommandType", bound="Command")
 ProjectType = TypeVar("ProjectType", bound="Project")
 
 var_pattern = re.compile(r"\{\{\s*project\.([a-z]+)\s*\}\}")
+
+
+class ConfigError(Exception):
+    pass
 
 
 class Command:
@@ -126,7 +132,7 @@ class Command:
         # This currently uses a naive regex which doesn't support escaping
         # If this ever causes problems we can switch it for a proper parser
         value = var_pattern.sub(
-            lambda matchobj: self.replacements.get(matchobj.group(1)), value
+            lambda matchobj: self.replacements.get(matchobj.group(1), ""), value
         )
         return value
 
@@ -223,7 +229,7 @@ class Project(Command):
 
         if "commands" in data:
             if not isinstance(data["commands"], dict):
-                raise ValueError(
+                raise ConfigError(
                     f"Unexpected commands in {name} - expected dict,"
                     f" but found {type(data['commands']).__name__}"
                 )
@@ -298,9 +304,37 @@ class Common(Project):
         return self._commands
 
 
+class DeferredProject:
+    def __init__(self, config, name, path):
+        self._config = config
+        self._name = name
+        self._path_str = path
+        self._path = Path(path)
+        self._project = None
+
+    def to_dict(self):
+        data = {"config": str(self._path_str)}
+        return data
+
+    def __getattr__(self, attr):
+        if self._project is None:
+            if self._path.is_dir():
+                self._path /= PROJECT_DEFAULT_FILENAME
+            raw = self._path.read_text()
+            data = yaml.safe_load(raw)
+            data["path"] = str(self._path.parent)
+            self._project = Project.from_dict(
+                config=self._config,
+                name=self._name,
+                data=data,
+            )
+
+        return getattr(self._project, attr)
+
+
 class Config:
     file: Optional[Path]
-    projects: Dict[str, Project]
+    projects: Dict[str, Project | DeferredProject]
     common_project: Optional[Project]
 
     # Config variables
@@ -320,9 +354,9 @@ class Config:
         Load from self.file
         """
         if not self.file:
-            raise ValueError("Cannot load a config without specifying the file")
+            raise ConfigError("Cannot load a config without specifying the file")
         if not self.file.is_file():
-            raise ValueError("Config file does not exist")
+            raise ConfigError("Config file does not exist")
 
         raw = self.file.read_text()
         self.loads(raw)
@@ -339,8 +373,10 @@ class Config:
                 self.from_dict(data)
             elif name == "_common":
                 if "path" in data:
-                    raise ValueError("Common config cannot define a path")
+                    raise ConfigError("Common config cannot define a path")
                 self.common_project = Common.from_dict(self, name, data)
+            elif "config" in data:
+                self.projects[name] = DeferredProject(self, name, data["config"])
             else:
                 self.projects[name] = Project.from_dict(self, name, data)
 
@@ -380,7 +416,7 @@ class Config:
 
     def save(self):
         if self.file is None:
-            raise ValueError("Cannot save a config without specifying the file")
+            raise ConfigError("Cannot save a config without specifying the file")
 
         raw = self.to_yaml()
 
