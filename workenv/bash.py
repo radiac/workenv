@@ -3,6 +3,7 @@ Bash autocompletion
 
 Based on click
 """
+
 import datetime
 import os
 import re
@@ -11,7 +12,6 @@ import sys
 from pathlib import Path
 
 from .constants import COMMAND_VAR, COMPLETE_VAR, CONFIG_DEFAULT_FILENAME
-
 
 # The setup script to be added to .bashrc
 INSTALLATION_SCRIPT_BASH = """

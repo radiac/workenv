@@ -1,12 +1,12 @@
 """
 Test command line
 """
+
 import sys
 
 import pytest
 
 from workenv.cli import run
-
 
 config_sample = """
 _common:

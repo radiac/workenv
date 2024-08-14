@@ -1,6 +1,7 @@
 """
 Test workenv/config.py from_dict
 """
+
 from pathlib import Path
 
 from workenv.config import Command, Config, Project, var_pattern
