@@ -1,5 +1,9 @@
 # workenv
 
+[![PyPI](https://img.shields.io/pypi/v/workenv.svg)](https://pypi.org/project/workenv/)
+[![Tests](https://github.com/radiac/workenv/actions/workflows/ci.yml/badge.svg)](https://github.com/radiac/workenv/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/radiac/workenv/graph/badge.svg?token=EWUKFNYIPX)](https://codecov.io/gh/radiac/workenv)
+
 A shortcut for jumping between local work environments in bash, and carrying out tasks
 within them.
 

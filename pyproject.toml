@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "workenv"
+description = "Manage local work environments"
+dynamic = ["version"]
+authors = [
+    { name="Richard Terry", email="code@radiac.net" },
+]
+readme = "README.md"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+    "Topic :: System :: System Shells",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["bash"]
+requires-python = ">=3.8"
+dependencies = [
+    "pyyaml",
+]
+
+[project.scripts]
+workenv = "workenv.cli:run"
+
+[project.urls]
+Homepage = "https://radiac.net/projects/workenv/"
+Changelog = "https://github.com/radiac/workenv/blob/main/changelog.rst"
+Repository = "https://github.com/radiac/workenv"
+Issues = "https://github.com/radiac/workenv/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["workenv*"]
+exclude = ["docs*", "tests*", "src*", "dist*"]
+
+[tool.setuptools.dynamic]
+version = {attr = "workenv.__version__"}
+
+[tool.pytest.ini_options]
+addopts = "--cov=workenv --cov-report=term --cov-report=html"
+testpaths = [
+    "tests",
+    "workenv",
+]
+
+[tool.coverage.run]
+source = ["workenv"]
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+include = "\\.pyi?$"
+
+[tool.isort]
+multi_line_output = 3
+line_length = 88
+sections = ["FUTURE", "STDLIB", "THIRDPARTY", "FIRSTPARTY", "LOCALFOLDER"]
+include_trailing_comma = true
+lines_after_imports = 2
+skip = [".git"]
+
+[tool.mypy]
+follow_imports = "skip"
+ignore_missing_imports = true
+
+[tool.doc8]
+max-line-length = 88
+ignore-path = ["*.txt"]
+
+[tool.ruff]
+line-length = 88
+lint.select = ["E", "F"]
+lint.ignore = [
+    "E501",  # line length
+]
+exclude = [
+    ".git",
+    "dist",
+]

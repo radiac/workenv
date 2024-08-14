@@ -1,7 +1,0 @@
-include README.rst
-include LICENSE
-include setup.cfg
-recursive-include workenv *
-recursive-include tests *
-global-exclude __pycache__
-global-exclude *.pyc
