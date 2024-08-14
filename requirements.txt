@@ -1,0 +1,9 @@
+# Dev
+pytest
+pytest-cov
+mypy
+types-PyYAML
+uv
+
+# Project
+pyyaml
