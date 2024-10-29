@@ -6,6 +6,7 @@ from __future__ import annotations
 
 import re
 import unicodedata
+from functools import cached_property
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Type, TypeVar
 
@@ -310,26 +311,30 @@ class DeferredProject:
         self._name = name
         self._path_str = path
         self._path = Path(path)
-        self._project = None
 
     def to_dict(self):
         data = {"config": str(self._path_str)}
         return data
 
-    def __getattr__(self, attr):
-        if self._project is None:
-            if self._path.is_dir():
-                self._path /= PROJECT_DEFAULT_FILENAME
-            raw = self._path.read_text()
-            data = yaml.safe_load(raw)
-            data["path"] = str(self._path.parent)
-            self._project = Project.from_dict(
-                config=self._config,
-                name=self._name,
-                data=data,
-            )
+    @cached_property
+    def project(self):
+        if self._path.is_dir():
+            self._path /= PROJECT_DEFAULT_FILENAME
+        raw = self._path.read_text()
+        data = yaml.safe_load(raw)
+        data["path"] = str(self._path.parent)
+        project = Project.from_dict(
+            config=self._config,
+            name=self._name,
+            data=data,
+        )
+        return project
 
-        return getattr(self._project, attr)
+    def __getattr__(self, attr):
+        return getattr(self.project, attr)
+
+    def __call__(self):
+        return self.project()
 
 
 class Config:
