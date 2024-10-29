@@ -2,6 +2,14 @@
 Changelog
 =========
 
+2.1.1 - 2024-10-29
+==================
+
+Bugfix:
+
+* Correct initialisation of deferred projects
+
+
 2.1.0 - 2024-08-14
 ==================
 
