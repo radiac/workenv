@@ -312,6 +312,10 @@ class DeferredProject:
         self._path_str = path
         self._path = Path(path)
 
+    @property
+    def name(self):
+        return self._name
+
     def to_dict(self):
         data = {"config": str(self._path_str)}
         return data
