@@ -2,6 +2,14 @@
 Changelog
 =========
 
+2.1.3 - 2026-02-24
+==================
+
+Bugfix:
+
+* Fix infinite recursion during yaml parse
+
+
 2.1.2 - 2025-11-07
 ==================
 

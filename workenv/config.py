@@ -335,7 +335,7 @@ class DeferredProject:
         return project
 
     def __getattr__(self, attr):
-        return getattr(self.project, attr)
+        return getattr(object.__getattribute__(self, "project"), attr)
 
     def __call__(self):
         return self.project()
